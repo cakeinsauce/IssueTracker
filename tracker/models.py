@@ -98,14 +98,14 @@ class IssueType(models.Model):
 
 
 class IssueStatus(models.Model):
-    OPEN = 'OPEN'
-    PROGRESS = 'PROGRESS'
-    DONE = 'DONE'
-    TODO = 'TODO'
-    REVIEW = 'REVIEW'
-    APPROVED = 'APPROVED'
-    REJECTED = 'REJECTED'
-    CANCELLED = 'CANCELLED'
+    OPEN = 'OPEN'            # issue is open and ready for the assignee to start work on it
+    PROGRESS = 'PROGRESS'    # issue is being actively worked on at the moment by the assignee
+    DONE = 'DONE'            # work has finished
+    TODO = 'TODO'            # issue has been reported and is waiting for the team to action it
+    REVIEW = 'REVIEW'        # assignee has carried out the work needed and it needs peer review
+    APPROVED = 'APPROVED'    # reviewer has approved work completed
+    REJECTED = 'REJECTED'    # reviewer has rejected the work completed
+    CANCELLED = 'CANCELLED'  # work has stopped and issue is considered done
 
     STATUS_CHOICES = (
         (OPEN, 'Open'),
