@@ -201,17 +201,17 @@ class Issue(models.Model):
         return self.title
 
 
-class RelatedIssue(models.Model):
-    source_issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
-    destination_issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return '{} to {}'.format(self.source_issue, self.destination_issue)
+# class RelatedIssue(models.Model):
+#     source_issue = models.ForeignKey(Issue, related_name=, on_delete=models.CASCADE)
+#     destination_issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return '{} to {}'.format(self.source_issue, self.destination_issue)
 
 
 class IssueAssignee(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    issue = models.ForeignKey(Issue, on_delete=models.CASCADE())
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
 
     def __str__(self):
         return '{} assignee to {}'.format(self.user, self.issue)
