@@ -26,6 +26,7 @@ class UserRole(models.Model):
     class Meta:
         verbose_name = 'Роль'
         verbose_name_plural = 'Роли'
+        ordering = ['id']
 
 
 class IssueSeverity(models.Model):
@@ -46,10 +47,16 @@ class IssueSeverity(models.Model):
     issue_severity = models.CharField(max_length=9,
                                       choices=SEVERITY_CHOICES,
                                       null=True,
-                                      default=TRIV)
+                                      default=TRIV,
+                                      verbose_name='Важность')
 
     def __str__(self):
         return self.issue_severity
+
+    class Meta:
+        verbose_name = 'Важность'
+        verbose_name_plural = 'Важность'
+        ordering = ['id']
 
 
 class IssuePriority(models.Model):
@@ -73,6 +80,11 @@ class IssuePriority(models.Model):
 
     def __str__(self):
         return self.issue_rank
+
+    class Meta:
+        verbose_name = 'Приоритет'
+        verbose_name_plural = 'Приоритет'
+        ordering = ['id']
 
 
 class IssueType(models.Model):
@@ -98,6 +110,11 @@ class IssueType(models.Model):
 
     def __str__(self):
         return self.issue_type
+
+    class Meta:
+        verbose_name = 'Тип'
+        verbose_name_plural = 'Тип'
+        ordering = ['id']
 
 
 class IssueStatus(models.Model):
@@ -128,6 +145,11 @@ class IssueStatus(models.Model):
     def __str__(self):
         return self.issue_status
 
+    class Meta:
+        verbose_name = 'Статус'
+        verbose_name_plural = 'Статус'
+        ordering = ['id']
+
 
 class AccessType(models.Model):
     GUEST = 'GUEST'          # random person not from the project
@@ -148,6 +170,11 @@ class AccessType(models.Model):
 
     def __str__(self):
         return self.access_type
+
+    class Meta:
+        verbose_name = 'Тип доступа'
+        verbose_name_plural = 'Тип доступа'
+        ordering = ['id']
 
 
 class UserProfile(models.Model):
