@@ -17,10 +17,15 @@ class UserRole(models.Model):
 
     user_role = models.CharField(max_length=15,
                                  choices=USER_CHOICES,
-                                 default=USER)
+                                 default=USER,
+                                 verbose_name='Роль')
 
     def __str__(self):
         return self.user_role
+
+    class Meta:
+        verbose_name = 'Роль'
+        verbose_name_plural = 'Роли'
 
 
 class IssueSeverity(models.Model):
@@ -147,16 +152,17 @@ class AccessType(models.Model):
 
 class UserProfile(models.Model):
     username = models.CharField(max_length=25, verbose_name='Имя пользователя')
-    password = models.CharField(max_length=100)
+    password = models.CharField(max_length=100, verbose_name='Пароль')
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     last_name = models.CharField(max_length=50, verbose_name='Фамилия')
     email_address = models.EmailField(max_length=95, verbose_name='E-mail')
-    allow_email_notification = models.BooleanField(default=False)
-    last_online = models.DateTimeField(auto_now=True)
-    is_online = models.BooleanField(default=False)
+    allow_email_notification = models.BooleanField(default=False, verbose_name='E-mail уведомления')
+    last_online = models.DateTimeField(auto_now=True, verbose_name='Последний онлайн')
+    is_online = models.BooleanField(default=False, verbose_name='Онлайн')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    profile_picture = models.ImageField(upload_to='photos/%Y/%m/%d/', default='photos/default/default.png')
-    user_role = models.ForeignKey(UserRole, models.SET_NULL, null=True, verbose_name='Роль')
+    profile_picture = models.ImageField(upload_to='photos/%Y/%m/%d/', default='photos/default/default.png',
+                                        verbose_name='Изображение профиля')
+    user_role = models.ForeignKey(UserRole, on_delete=models.PROTECT, default=3, verbose_name='Роль')
     enabled = models.BooleanField(default=True, verbose_name='Активен')
 
     def __str__(self):
