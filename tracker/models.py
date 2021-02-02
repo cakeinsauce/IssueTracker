@@ -8,18 +8,16 @@ class UserRole(models.Model):
     ADMIN = 'ADMINISTRATOR'  # can do everything
     MODER = 'MODERATOR'      # like admin but less
     USER = 'USER'            # authorized user
-    VIEWER = 'VIEWER'        # not authorized user
 
     USER_CHOICES = (
         (ADMIN, 'Administrator'),
         (MODER, 'Moderator'),
         (USER, 'User'),
-        (VIEWER, 'Viewer'),
     )
 
     user_role = models.CharField(max_length=15,
                                  choices=USER_CHOICES,
-                                 default=VIEWER)
+                                 default=USER)
 
     def __str__(self):
         return self.user_role
@@ -148,21 +146,26 @@ class AccessType(models.Model):
 
 
 class UserProfile(models.Model):
-    username = models.CharField(max_length=25)
+    username = models.CharField(max_length=25, verbose_name='Имя пользователя')
     password = models.CharField(max_length=100)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email_address = models.EmailField(max_length=95)
+    first_name = models.CharField(max_length=50, verbose_name='Имя')
+    last_name = models.CharField(max_length=50, verbose_name='Фамилия')
+    email_address = models.EmailField(max_length=95, verbose_name='E-mail')
     allow_email_notification = models.BooleanField(default=False)
     last_online = models.DateTimeField(auto_now=True)
     is_online = models.BooleanField(default=False)
-    date_created = models.DateTimeField(auto_now_add=True)
-    profile_picture = models.ImageField(upload_to='photos/%Y/%m/%d/')
-    user_role = models.ForeignKey(UserRole, models.SET_NULL, null=True)
-    enabled = models.BooleanField(default=True)
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    profile_picture = models.ImageField(upload_to='photos/%Y/%m/%d/', default='photos/default/default.png')
+    user_role = models.ForeignKey(UserRole, models.SET_NULL, null=True, verbose_name='Роль')
+    enabled = models.BooleanField(default=True, verbose_name='Активен')
 
     def __str__(self):
         return '{} {}'.format(self.username, self.email_address)
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+        ordering = ['-date_created']
 
 
 class Project(models.Model):
