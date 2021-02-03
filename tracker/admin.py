@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import UserProfile, UserRole, IssueSeverity, IssuePriority, IssueType, IssueStatus, AccessType
+from .models import *
 
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -10,6 +10,13 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_editable = ('enabled',)
     search_fields = ('username', 'email_address')
     list_filter = ('user_role', 'enabled')
+
+
+class IssueAdmin(admin.ModelAdmin):
+    list_display = ('id', 'project', 'title', 'reporter', 'added_date', 'due_date', 'issue_type')
+    list_display_links = ('id', 'title')
+    search_fields = ('project', 'title', 'reporter', 'issue_type')
+    list_filter = ('issue_type',)
 
 
 class UserRoleAdmin(admin.ModelAdmin):
@@ -43,6 +50,7 @@ class AccessTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Issue, IssueAdmin)
 admin.site.register(UserRole, UserRoleAdmin)
 admin.site.register(IssueSeverity, IssueSeverityAdmin)
 admin.site.register(IssuePriority, IssuePriorityAdmin)
