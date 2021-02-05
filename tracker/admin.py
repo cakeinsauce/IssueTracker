@@ -19,6 +19,33 @@ class IssueAdmin(admin.ModelAdmin):
     list_filter = ('issue_type',)
 
 
+class IssueAssigneeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'issue')
+    list_display_links = ('id', 'user')
+    search_fields = ('user', 'issue')
+    list_filter = ('issue',)
+
+
+class IssueNoteAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'note_date', 'user', 'issue')
+    list_display_links = ('id', 'title')
+    search_fields = ('user', 'issue')
+    list_filter = ('note_date', 'issue')
+
+
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('id', 'project_name')
+    list_display_links = ('id', 'project_name')
+    search_fields = ('project_name',)
+
+
+class ProjectAccessAdmin(admin.ModelAdmin):
+    list_display = ('id', 'project', 'user', 'access_type')
+    list_display_links = ('id', 'project')
+    search_fields = ('project', 'user')
+    list_filter = ('project', 'user', 'access_type')
+
+
 class UserRoleAdmin(admin.ModelAdmin):
     list_display = ('id', 'user_role')
     list_display_links = ('id', 'user_role')
@@ -51,6 +78,10 @@ class AccessTypeAdmin(admin.ModelAdmin):
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Issue, IssueAdmin)
+admin.site.register(IssueAssignee, IssueAssigneeAdmin)
+admin.site.register(IssueNote, IssueNoteAdmin)
+admin.site.register(Project, ProjectAdmin)
+admin.site.register(ProjectAccess, ProjectAccessAdmin)
 admin.site.register(UserRole, UserRoleAdmin)
 admin.site.register(IssueSeverity, IssueSeverityAdmin)
 admin.site.register(IssuePriority, IssuePriorityAdmin)

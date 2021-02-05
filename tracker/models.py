@@ -4,6 +4,11 @@ import datetime
 from django.utils import timezone
 
 
+def get_default_user_role():
+    """ get a default value for user_role """
+    return UserRole.objects.get(user_role='USER')
+
+
 class UserProfile(models.Model):
     username = models.CharField(max_length=25, verbose_name='Имя пользователя')
     password = models.CharField(max_length=100, verbose_name='Пароль')
@@ -16,7 +21,7 @@ class UserProfile(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     profile_picture = models.ImageField(upload_to='photos/%Y/%m/%d/', default='photos/default/default.png',
                                         verbose_name='Изображение профиля')
-    user_role = models.ForeignKey('UserRole', models.PROTECT, default=3, verbose_name='Роль')
+    user_role = models.ForeignKey('UserRole', models.PROTECT, default=get_default_user_role, verbose_name='Роль')
     enabled = models.BooleanField(default=True, verbose_name='Активен')
 
     def __str__(self):
@@ -41,7 +46,7 @@ class Issue(models.Model):
     added_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата добавления')
     time_estimate = models.DurationField(null=True, verbose_name='Оценка времени')
     due_date = models.DateTimeField(verbose_name='Выполнить до')
-    date_submitted = models.DateTimeField(blank=True, default=None, verbose_name='Дата завершения')
+    date_submitted = models.DateTimeField(null=True, blank=True, verbose_name='Дата завершения')  # надо исправить пустое значение
     last_change = models.DateTimeField(auto_now=True, verbose_name='Последнее изменение')
     issue_type = models.ForeignKey('IssueType', models.SET_NULL, null=True, verbose_name='Тип проблемы')
     issue_priority = models.ForeignKey('IssuePriority', models.SET_NULL, null=True, verbose_name='Приоритет проблемы')
@@ -59,39 +64,59 @@ class Issue(models.Model):
 
 
 class IssueAssignee(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name='Пользователь')
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, verbose_name='Проблема')
 
     def __str__(self):
         return '{} assignee to {}'.format(self.user, self.issue)
 
+    class Meta:
+        verbose_name = 'Правоприемник проблемы'
+        verbose_name_plural = 'Правоприемники проблемы'
+        ordering = ['-id']
+
 
 class IssueNote(models.Model):
-    title = models.CharField(max_length=120)
-    note_text = models.TextField()
-    note_date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(UserProfile, models.SET_NULL, null=True)
-    issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
+    title = models.CharField(max_length=120, verbose_name='Заголовок')
+    note_text = models.TextField(verbose_name='Текст')
+    note_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
+    user = models.ForeignKey(UserProfile, models.SET_NULL, null=True, verbose_name='Пользователь')
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, verbose_name='Проблема')
 
     def __str__(self):
         return '{} wrote {} to {}'.format(self.user, self.title, self.issue)
 
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+        ordering = ['-note_date']
+
 
 class Project(models.Model):
-    project_name = models.CharField(max_length=120)
-    description = models.TextField(blank=True)
+    project_name = models.CharField(max_length=120, verbose_name='Проект')
+    description = models.TextField(blank=True, verbose_name='Описание')
 
     def __str__(self):
         return self.project_name
 
+    class Meta:
+        verbose_name = 'Проект'
+        verbose_name_plural = 'Проекты'
+        ordering = ['-id']
+
 
 class ProjectAccess(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    access_type = models.ForeignKey('AccessType', on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='Проект')
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name='Пользователь')
+    access_type = models.ForeignKey('AccessType', on_delete=models.CASCADE, verbose_name='Тип доступа')
 
     def __str__(self):
         return '{} {} {}'.format(self.project, self.user, self.access_type)
+
+    class Meta:
+        verbose_name = 'Доступ к проекту'
+        verbose_name_plural = 'Доступ к проектам'
+        ordering = ['-id']
 
 
 class UserRole(models.Model):
