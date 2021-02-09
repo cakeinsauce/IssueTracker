@@ -76,15 +76,12 @@ class AccessTypeAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'access_type')
 
 
-admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(Issue, IssueAdmin)
-admin.site.register(IssueAssignee, IssueAssigneeAdmin)
-admin.site.register(IssueNote, IssueNoteAdmin)
-admin.site.register(Project, ProjectAdmin)
-admin.site.register(ProjectAccess, ProjectAccessAdmin)
-admin.site.register(UserRole, UserRoleAdmin)
-admin.site.register(IssueSeverity, IssueSeverityAdmin)
-admin.site.register(IssuePriority, IssuePriorityAdmin)
-admin.site.register(IssueType, IssueTypeAdmin)
-admin.site.register(IssueStatus, IssueStatusAdmin)
-admin.site.register(AccessType, AccessTypeAdmin)
+models = [UserProfile, Issue, IssueAssignee, IssueNote, Project, ProjectAccess, UserRole,
+          IssueSeverity, IssuePriority, IssueType, IssueStatus, AccessType]
+
+models_admin = [UserProfileAdmin, IssueAdmin, IssueAssigneeAdmin, IssueNoteAdmin,
+                ProjectAdmin, ProjectAccessAdmin, UserRoleAdmin, IssueSeverityAdmin,
+                IssuePriorityAdmin, IssueTypeAdmin, IssueStatusAdmin, AccessTypeAdmin]
+
+for model, model_admin in zip(models, models_admin):
+    admin.site.register(model, model_admin)

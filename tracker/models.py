@@ -46,12 +46,12 @@ class Issue(models.Model):
     added_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата добавления')
     time_estimate = models.DurationField(null=True, verbose_name='Оценка времени')
     due_date = models.DateTimeField(verbose_name='Выполнить до')
-    date_submitted = models.DateTimeField(null=True, blank=True, verbose_name='Дата завершения')  # надо исправить пустое значение
+    date_submitted = models.DateTimeField(null=True, blank=True, editable=False, verbose_name='Дата завершения')
     last_change = models.DateTimeField(auto_now=True, verbose_name='Последнее изменение')
     issue_type = models.ForeignKey('IssueType', models.SET_NULL, null=True, verbose_name='Тип проблемы')
     issue_priority = models.ForeignKey('IssuePriority', models.SET_NULL, null=True, verbose_name='Приоритет проблемы')
     issue_status = models.ForeignKey('IssueStatus', models.SET_NULL, default=get_default_issue_status,
-                                     null=True, verbose_name='Статус проблемы')
+                                     null=True, editable=False, verbose_name='Статус проблемы')
     issue_severity = models.ForeignKey('IssueSeverity', models.SET_NULL, null=True, verbose_name='Серьезность проблемы')
 
     def __str__(self):
