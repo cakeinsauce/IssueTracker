@@ -20,14 +20,15 @@ def projects_list(request):
 def project_details(request, project_id):
     """getting detail information about the project"""
     project = Project.objects.get(pk=project_id)
+    project_owner = ProjectAccess.objects.filter(access_type__access_type='OWNER').get(project=project_id)
 
-    return render(request, 'tracker/project_details.html', {'project': project})
+    return render(request, 'tracker/project_details.html', {'project': project, 'project_owner': project_owner})
 
 
-def users(request):
+def index(request):
     profiles = UserProfile.objects.all()
     context = {
         'profiles': profiles,
         'title': 'Список пользователей'
     }
-    return render(request, 'tracker/users.html', context)
+    return render(request, 'tracker/index.html', context)
